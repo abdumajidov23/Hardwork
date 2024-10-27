@@ -41,10 +41,17 @@ export class RoleService {
     return updatedRole;
   }
 
-  async remove(id: number) {
-    const deletedRole = await this.prismaService.role.delete({
+async remove(id: number) {
+  await this.prismaService.staffRole.deleteMany({
+    where: {
+      roleId: id
+    }
+  });
+
+    const deleteRole = await this.prismaService.role.delete({
       where: { id },
-    });
-    return deletedRole;
-  }
+    })
+    return deleteRole;
+}
+
 }

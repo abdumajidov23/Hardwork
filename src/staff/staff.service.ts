@@ -47,9 +47,13 @@ export class StaffService {
     return newStaff;
   }
 
-  findAll() {
-    return `This action returns all staff`;
+  async findAll() {
+    const roles = await this.prismaService.role.findMany({
+      include: { staffs: { include: { staff: true } } }
+    });
+    return roles;
   }
+  
 
   findOne(id: number) {
     return `This action returns a #${id} staff`;
@@ -59,7 +63,18 @@ export class StaffService {
     return `This action updates a #${id} staff`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} staff`;
+  async remove(id: number) {
+    // StaffRole bo'yicha bog'langan yozuvlarni o'chirish
+    await this.prismaService.staffRole.deleteMany({
+      where: { staffId: id },
+    });
+  
+    // Keyin staff ni o'chirish
+    const deletedStaff = await this.prismaService.staff.delete({
+      where: { id },
+    });
+  
+    return deletedStaff;
   }
+  
 }

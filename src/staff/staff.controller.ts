@@ -12,8 +12,8 @@ export class StaffController {
     return this.staffService.create(createStaffDto);
   }
 
-  @Get('get')
-  findAll() {
+  @Get('all')
+ findAll() {
     return this.staffService.findAll();
   }
 
